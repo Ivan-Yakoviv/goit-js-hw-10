@@ -62,23 +62,26 @@ function startCountdown() {
   btn.style.background = '#CFCFCF';
   btn.style.color = '#989898'
   input.disabled = true; 
+  input.style.borderColor = "#808080";
+  input.style.color = "#808080"
 
     const timerId = setInterval(() => {
         if (userSelectedDate >= 999) {
-        btn.disabled = true;    
+        // btn.disabled = true;    
         userSelectedDate -= 1000;
         let timeObject = convertMs(userSelectedDate);
         padStart(timeObject);
         } else {
-            btn.disabled = false;
+          btn.disabled = false;
+          input.disabled = false;
         };
     }, 1000); 
 
 };
 
-function padStart(event){
-    days.textContent = event.days;
-    hours.textContent = event.hours;
-    minutes.textContent = event.minutes;
-    seconds.textContent = event.seconds;
+function padStart(countdown){
+    days.textContent = countdown.days;
+    hours.textContent = countdown.hours;
+    minutes.textContent = countdown.minutes;
+    seconds.textContent = countdown.seconds;
 };
