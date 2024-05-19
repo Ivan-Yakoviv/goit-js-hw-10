@@ -22,8 +22,16 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
-  },
+    if (selectedDates[0] < new Date()) {
+      iziToast.show({
+        message: "Please choose a date in the future", position: 'topCenter', backgroundColor: 'red', messageColor: 'white', messageSize: '16'
+      });
+        btn.disabled = true;
+    } else {
+        userSelectedDate = selectedDates[0] - new Date(); 
+        btn.disabled = false;
+    }
+    },
 };
 
 flatpickr(input, options);
@@ -45,8 +53,32 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
-}
+};
 
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+btn.addEventListener('click', startCountdown);
+
+function startCountdown() {
+  btn.disabled = true; 
+  btn.style.background = '#CFCFCF';
+  btn.style.color = '#989898'
+  input.disabled = true; 
+
+    const timerId = setInterval(() => {
+        if (userSelectedDate >= 999) {
+        btn.disabled = true;    
+        userSelectedDate -= 1000;
+        let timeObject = convertMs(userSelectedDate);
+        padStart(timeObject);
+        } else {
+            btn.disabled = false;
+        };
+    }, 1000); 
+
+};
+
+function padStart(event){
+    days.textContent = event.days;
+    hours.textContent = event.hours;
+    minutes.textContent = event.minutes;
+    seconds.textContent = event.seconds;
+};
